@@ -1,0 +1,15 @@
+.home {
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    overflow: hidden;
+    .left{
+        height: 100vh;
+        background: url("../../../../public/image/bg_home.png");
+        background-repeat: no-repeat;
+        background-size: contain;
+    }
+    .right{
+        height: 100vh;
+    }
+}

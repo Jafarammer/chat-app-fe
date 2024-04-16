@@ -1,23 +1,34 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from "react";
+import { Route, Router, Switch, Redirect } from "react-router-dom";
+import { getAccessToken } from "./utils/Token";
+// container
+import { Home, Chat, SignUp, Signin } from "./containers";
 
 function App() {
+  const token = getAccessToken();
+  const [render, setRender] = useState("");
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      {/* <Router> */}
+      <Switch>
+        <Route path="/" exact>
+          {token ? <Home /> : <Redirect to="/signin" />}
+        </Route>
+        <Route path="/chat">
+          {token ? <Chat /> : <Redirect to="/signin" />}
+        </Route>
+        <Route path="/signin">
+          {token ? (
+            <Redirect to="/" />
+          ) : (
+            <Signin render={render} setRender={setRender} />
+          )}
+        </Route>
+        <Route path="/signup">{token ? <Redirect to="/" /> : <SignUp />}</Route>
+      </Switch>
+      {/* </Router> */}
+      {/* <Route path="/" component={Home} exact /> */}
+      {/* <Route path="/chat" component={Chat} /> */}
     </div>
   );
 }
