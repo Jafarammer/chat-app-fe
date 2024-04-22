@@ -12,7 +12,7 @@ function App() {
       {/* <Router> */}
       <Switch>
         <Route path="/" exact>
-          {token ? <Home /> : <Redirect to="/signin" />}
+          {token ? <Home setRender={setRender} /> : <Redirect to="/signin" />}
         </Route>
         <Route path="/chat">
           {token ? <Chat /> : <Redirect to="/signin" />}
