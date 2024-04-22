@@ -1,23 +1,31 @@
 import React from 'react'
-import {Row,Col,Button,Card,Avatar,Input,Space,Popover,List,Typography}  from "antd"
-import {PlusOutlined,UserOutlined,SearchOutlined,SendOutlined} from "@ant-design/icons"
+import {Row,Col,Button,Card,Avatar,Input,Space,Popover,List,Typography,Skeleton}  from "antd"
+import {PlusOutlined,UserOutlined,SearchOutlined,BellFilled} from "@ant-design/icons"
 // child
+// import { ChatState } from '../../../context/ChatProvider'
 import ModalProfile from './ModalProfile'
 import ModalLogout from './ModalLogout'
+// elements
+import {Loading} from '../../elements'
 import './style.scss'
 const {Text} = Typography
 
-const listProfile = ["Profile","Logout"]
 
 function Home({
   // props useState
   showProfile,
   confirmLogout,
+  contextHolder,
+  search,
+  setSearch,
+  loading,
+  searchResult,
   // props function
   openProfile,
   closeProfile,
   onLogout,
-  onConfirm
+  onConfirm,
+  onSearch
 }) {
   const content = (
     <List
@@ -36,10 +44,11 @@ function Home({
   )
   return (
     <div className='home'>
+      {contextHolder}
       <Row>
         <Col span={6}>
           <Card className='card-left' bodyStyle={{padding: 0}}>
-            <div className='d-flex align-items-center mb-3 card-header'>
+            <div className='d-flex align-items-center justify-content-between mb-3 card-header'>
               <Popover
                 trigger={'hover'}
                 placement='bottomRight'
@@ -48,6 +57,7 @@ function Home({
               >
                 <Avatar size={'large'} className='ms-3 avatar' icon={<UserOutlined />} />
               </Popover>
+              <BellFilled className='me-3' />
             </div>
             <Button 
               className='float-end me-2 mb-3' 
@@ -58,34 +68,41 @@ function Home({
               New Group
             </Button>
             <div className='d-flex justify-content-center mb-3 card-left-div-input'>
-              <Input placeholder='Search' suffix={<SearchOutlined/>} className='input' />
+              <Input 
+                placeholder='Search' 
+                suffix={<SearchOutlined/>} 
+                className='input'
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                onKeyDown={(e) => {
+                  if(e.key == "Enter") {
+                    onSearch()
+                  }
+                }}
+              />
             </div>
-            <Card className='card-list' bodyStyle={{padding: 0}}>
-              <List
-                itemLayout='horizontal'
-              >
-                <List.Item className='py-1 ps-2'>
-                    <List.Item.Meta
-                      avatar={<Avatar icon={<UserOutlined />} />}
-                      title="Anya Geraldine"
-                      description="Good morning far"
-                    />
-                </List.Item>
-              </List>
-            </Card>
-            <Card className='card-list' bodyStyle={{padding: 0}}>
-              <List
-                itemLayout='horizontal'
-              >
-                <List.Item className='py-1 ps-2'>
-                    <List.Item.Meta
-                      avatar={<Avatar icon={<UserOutlined />} />}
-                      title="Lyodra"
-                      description="Good morning jafar"
-                    />
-                </List.Item>
-              </List>
-            </Card>
+            {
+              loading 
+                ? 
+                <Loading/> 
+                :
+                searchResult?.map((item,index) => (
+                  <Card key={index} className='card-list' bodyStyle={{padding: 0}}>
+                    <List
+                      itemLayout='horizontal'
+                    >
+                      <List.Item className='py-1 ps-2'>
+                          <List.Item.Meta
+                            avatar={<Avatar icon={<UserOutlined />} />}
+                            title={item.name}
+                            description={item.email}
+                          />
+                      </List.Item>
+                    </List>
+                  </Card>
+                ))
+                 
+            }
           </Card>
         </Col>
         <Col span={18}>

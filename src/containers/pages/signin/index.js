@@ -29,10 +29,8 @@ function Signin({ setRender }) {
             content: "Login successfully",
             duration: 3,
           });
-          setTimeout(() => {
-            setRender(Date.now());
-            history.push("/");
-          }, 3000);
+          setRender(Date.now());
+          history.push("/");
         }
       })
       .catch((err) => {
@@ -47,6 +45,11 @@ function Signin({ setRender }) {
         setIsLoading(false);
       });
   };
+  // useEffect
+  // useEffect(() => {
+  //   const user = JSON.parse(localStorage.getItem("userInfo"));
+  //   if (user) history.push("/");
+  // }, [history]);
   // send props to components
   const props = {
     isLoading,
