@@ -98,7 +98,7 @@ function Home({
               width: '100%',
             }}
           >
-            <Input placeholder="Typing..." />
+            <Input placeholder="Typing a message" />
             <Button type="primary">
               Send
             </Button>
