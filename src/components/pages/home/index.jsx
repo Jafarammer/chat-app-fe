@@ -60,11 +60,31 @@ function Home({
             <div className='d-flex justify-content-center mb-3 card-left-div-input'>
               <Input placeholder='Search' suffix={<SearchOutlined/>} className='input' />
             </div>
-            <Card className='card-list'>
-              <p className='fw-bold'>Wan</p>
+            <Card className='card-list' bodyStyle={{padding: 0}}>
+              <List
+                itemLayout='horizontal'
+              >
+                <List.Item className='py-1 ps-2'>
+                    <List.Item.Meta
+                      avatar={<Avatar icon={<UserOutlined />} />}
+                      title="Anya Geraldine"
+                      description="Good morning far"
+                    />
+                </List.Item>
+              </List>
             </Card>
-            <Card className='card-list'>
-              <p className='fw-bold'>Jafar</p>
+            <Card className='card-list' bodyStyle={{padding: 0}}>
+              <List
+                itemLayout='horizontal'
+              >
+                <List.Item className='py-1 ps-2'>
+                    <List.Item.Meta
+                      avatar={<Avatar icon={<UserOutlined />} />}
+                      title="Lyodra"
+                      description="Good morning jafar"
+                    />
+                </List.Item>
+              </List>
             </Card>
           </Card>
         </Col>
