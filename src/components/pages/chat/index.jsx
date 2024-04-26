@@ -10,7 +10,8 @@ import {
   Popover,
   List,
   Drawer,
-  Typography
+  Typography,
+  Spin
 }  from "antd"
 import {
   PlusOutlined,
@@ -19,14 +20,18 @@ import {
   BellFilled
 } from "@ant-design/icons"
 // element
-import {ModalLogout,ModalProfile,FormGroup} from '../../elements'
+import {ModalLogout,ModalProfile,FormGroup,CardChat} from '../../elements'
 import './style.scss'
+import { getSender } from '../../../config/ChatLogics'
 const {Text} = Typography
 
 
 
 function Chat({
   // props context
+  selectedChat,
+  setSelectedChat,
+  chats,
   // props useState
   contextHolder,
   search,
@@ -34,6 +39,11 @@ function Chat({
   showProfile,
   confirmLogout,
   formGroup,
+  searchResult,
+  loading,
+  searchUser,
+  loadingChat,
+  loggedUser,
   // props function
   openProfile,
   closeProfile,
@@ -41,7 +51,10 @@ function Chat({
   openGroup,
   onSearch,
   onLogout,
-  closeGroup
+  closeGroup,
+  openSearch,
+  closeSearch,
+  onAccessChat
 }) {
   const content = (
     <List
@@ -90,15 +103,27 @@ function Chat({
                 placeholder='Search' 
                 suffix={<SearchOutlined/>} 
                 className='input'
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-                onKeyDown={(e) => {
-                  if(e.key == "Enter") {
-                    onSearch()
-                  }
-                }}
+                readOnly
+                onClick={openSearch}
               />
             </div>
+            {
+              chats?.map((item) => (
+                <Card key={item._id} onClick={() => setSelectedChat(item)} className={selectedChat === item ? 'card-list-focus' : 'card-list'} bodyStyle={{padding: 0}}>
+                    <List itemLayout='horizontal'>
+                    <List.Item className='py-1 ps-2'>
+                          <List.Item.Meta
+                            avatar={<Avatar icon={<UserOutlined />} />}
+                            title={
+                              !item.isGroupChat ? getSender(loggedUser, item.users) : item.chatName
+                            }
+                            // description="email"
+                          />
+                      </List.Item>
+                    </List>
+                </Card>
+              ))
+            }
           </Card>
         </Col>
         <Col span={18}>
@@ -137,8 +162,34 @@ function Chat({
       </section>
       {/* section drawer */}
       <section>
+        {/* drawer create group */}
         <Drawer title='Create new group' open={formGroup} onClose={closeGroup}>
             <FormGroup/>
+        </Drawer>
+        {/* drawer search */}
+        <Drawer style={{width: '480px'}} placement='left' open={searchUser} onClose={closeSearch}>
+          <div className='d-flex justify-content-center mb-3 card-left-div-input'>
+            <Input 
+              placeholder='Search' 
+              suffix={<SearchOutlined/>} 
+              className='input mx-5'
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              onKeyDown={(e) => {
+                if(e.key == "Enter") {
+                  onSearch()
+                }
+              }}
+            />
+          </div>
+          <CardChat
+            loading={loading}
+            searchResult={searchResult}
+            onAccessChat={onAccessChat}
+          />
+          {
+            loadingChat && <Spin/>
+          }
         </Drawer>
       </section>
     </div>
