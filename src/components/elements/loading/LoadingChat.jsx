@@ -1,7 +1,7 @@
 import React from 'react'
 import { Skeleton,Space } from 'antd';
 
-function Loading() {
+function LoadingChat() {
   return (
     <Space
         direction='vertical'
@@ -16,4 +16,4 @@ function Loading() {
   )
 }
 
-export default Loading
+export default LoadingChat

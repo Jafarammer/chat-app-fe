@@ -1,9 +1,8 @@
 import React from 'react'
 import {Modal,Avatar,Typography,Input,Button} from 'antd'
-import {CloseCircleFilled,UserOutlined} from '@ant-design/icons'
+import {UserOutlined} from '@ant-design/icons'
 import './style.scss'
-const {Text,Title} = Typography
-
+const {Title} = Typography
 
 function ModalProfile({open,onClose}) {
   return (

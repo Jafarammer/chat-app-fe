@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import message from "antd/lib/message";
 import { useHistory } from "react-router-dom";
 // action
@@ -15,39 +15,31 @@ function SignUp() {
   const [isLoading, setIsLoading] = useState(false);
   // function
   const onRegistered = (value) => {
-    const result = {
+    const data = {
       name: value.name,
       email: value.email,
       password: value.password,
       pic: images.name,
     };
     setIsLoading(true);
-    register(result)
-      .then((res) => {
-        if (res.status == 201) {
-          messageApi.open({
-            type: "success",
-            content: "Register successfully",
-            duration: 3,
-          });
-          setTimeout(() => {
-            history.push("/");
-          }, 3000);
-        }
-      })
-      .catch((err) => {
-        if (err) {
-          messageApi.open({
-            type: "error",
-            content: "Register failed",
-            duration: 3,
-          });
-        }
-      })
-      .finally(() => {
-        setImages("");
+    register(data).then((result) => {
+      if (result == true) {
+        messageApi.open({
+          type: "success",
+          content: "Register success",
+          duration: 2,
+        });
+        history.push("/");
         setIsLoading(false);
-      });
+      } else {
+        messageApi.open({
+          type: "error",
+          content: "Register failed",
+          duration: 2,
+        });
+        setIsLoading(false);
+      }
+    });
   };
   // send props to component
   const props = {

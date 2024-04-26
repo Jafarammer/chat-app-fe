@@ -1,55 +1,57 @@
 import React, { useState, useEffect } from "react";
 import { useHistory } from "react-router-dom";
-import Cookies from "js-cookie";
 import message from "antd/lib/message";
+import { getAccessToken } from "../../../utils/Token.js";
+// context
+import { ChatState } from "../../../context/ChatProvider.js";
 // action
 import { login } from "../../../action/signin.js";
 // components
 import SigninView from "../../../components/pages/signin/index.jsx";
 
-function Signin({ setRender }) {
+function Signin() {
+  // token
+  const token = getAccessToken();
   // react router dom
   const history = useHistory();
+  // context
+  const { setUser } = ChatState();
   // useState
   const [isLoading, setIsLoading] = useState(false);
   const [messageApi, contextHolder] = message.useMessage();
   // function
   const onLogin = (value) => {
-    const result = {
+    const data = {
       email: value.email,
       password: value.password,
     };
     setIsLoading(true);
-    login(result)
-      .then((res) => {
-        if (res.status == 200) {
-          Cookies.set("chatToken", res.data.token);
-          messageApi.open({
-            type: "success",
-            content: "Login successfully",
-            duration: 3,
-          });
-          setRender(Date.now());
-          history.push("/");
-        }
-      })
-      .catch((err) => {
-        if (err) {
-          messageApi.open({
-            type: "error",
-            content: "Login failed",
-          });
-        }
-      })
-      .finally(() => {
+    login(data).then((result) => {
+      if (result == true) {
+        messageApi.open({
+          type: "success",
+          content: "Login success",
+          duration: 2,
+        });
+        history.push("/chat");
         setIsLoading(false);
-      });
+        setUser(localStorage.getItem("userInfo"));
+      } else {
+        messageApi.open({
+          type: "error",
+          content: "Login failed",
+          duration: 2,
+        });
+        setIsLoading(false);
+      }
+    });
   };
   // useEffect
-  // useEffect(() => {
-  //   const user = JSON.parse(localStorage.getItem("userInfo"));
-  //   if (user) history.push("/");
-  // }, [history]);
+  useEffect(() => {
+    if (token) {
+      history.push("/chat");
+    }
+  }, [history, token]);
   // send props to components
   const props = {
     isLoading,
