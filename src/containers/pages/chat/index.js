@@ -30,6 +30,7 @@ function Chat() {
   const [loggedUser, setLoggedUser] = useState(false);
   const [searchGroup, setSearchGroup] = useState("");
   const [searchResultGroup, setSearchResultGroup] = useState([]);
+  const [selectedUser, setSelectedUser] = useState([]);
   // function
   const openSearch = () => {
     setSearchUser(true);
@@ -159,6 +160,22 @@ function Chat() {
       });
     }
   };
+  const onCreateGroup = (userAdd) => {
+    if (selectedUser.includes(userAdd)) {
+      messageApi.open({
+        type: "error",
+        content: "User already added!!!",
+        duration: 2,
+      });
+      return;
+    }
+
+    setSelectedUser([...selectedUser, userAdd]);
+  };
+  const onRemoveTag = (user) => {
+    const delTag = selectedUser?.filter((item) => item._id !== user._id);
+    setSelectedUser(delTag);
+  };
   const onLogout = () => {
     Cookies.remove("chatToken");
     history.push("/");
@@ -190,6 +207,7 @@ function Chat() {
     chats,
     loggedUser,
     searchResultGroup,
+    selectedUser,
   };
   return (
     <ChatView
@@ -205,6 +223,8 @@ function Chat() {
       closeSearch={closeSearch}
       onAccessChat={onAccessChat}
       onSearchGroup={onSearchGroup}
+      onCreateGroup={onCreateGroup}
+      onRemoveTag={onRemoveTag}
     />
   );
 }

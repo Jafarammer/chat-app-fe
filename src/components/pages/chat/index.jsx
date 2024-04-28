@@ -12,13 +12,15 @@ import {
   Drawer,
   Typography,
   Spin,
-  Form
+  Form,
+  Tag
 }  from "antd"
 import {
   PlusOutlined,
   UserOutlined,
   SearchOutlined,
-  BellFilled
+  BellFilled,
+  CloseCircleFilled
 } from "@ant-design/icons"
 // element
 import {ModalLogout,ModalProfile,FormGroup,CardChat,SkeletonLoading} from '../../elements'
@@ -46,6 +48,7 @@ function Chat({
   loadingChat,
   loggedUser,
   searchResultGroup,
+  selectedUser,
   // props function
   openProfile,
   closeProfile,
@@ -57,7 +60,9 @@ function Chat({
   openSearch,
   closeSearch,
   onAccessChat,
-  onSearchGroup
+  onSearchGroup,
+  onCreateGroup,
+  onRemoveTag
 }) {
   const content = (
     <List
@@ -169,12 +174,21 @@ function Chat({
         <Drawer title='Create new group' open={formGroup} onClose={closeGroup}>
           <Input placeholder='Group Name' className='mb-3' />
           <Input placeholder='Add People' className='mb-3' onChange={(e) => onSearchGroup(e.target.value)} />
+          {
+            selectedUser?.map((item) => {
+              return (
+                <Tag key={item._id} color='#00b96b' className='mb-2'>
+                  {item.name} <CloseCircleFilled className='ms-1' onClick={() => onRemoveTag(item)}/>
+                </Tag>
+              )
+            })
+          }
             {
               loading ? (<SkeletonLoading/>) :(
                 searchResultGroup?.slice(0,4).map((item) => (
                   <Card 
                     key={item._id} 
-                    // onClick={() => setSelectedChat(item)} 
+                    onClick={() => onCreateGroup(item)} 
                     className='card-list mb-2' 
                     bodyStyle={{padding: 0}}
                   >
