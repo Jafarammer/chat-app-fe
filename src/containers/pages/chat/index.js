@@ -31,6 +31,7 @@ function Chat() {
   const [searchGroup, setSearchGroup] = useState("");
   const [searchResultGroup, setSearchResultGroup] = useState([]);
   const [selectedUser, setSelectedUser] = useState([]);
+  const [groupChatName, setGroupChatName] = useState("");
   // function
   const openSearch = () => {
     setSearchUser(true);
@@ -160,7 +161,7 @@ function Chat() {
       });
     }
   };
-  const onCreateGroup = (userAdd) => {
+  const checkUserExist = (userAdd) => {
     if (selectedUser.includes(userAdd)) {
       messageApi.open({
         type: "error",
@@ -171,6 +172,36 @@ function Chat() {
     }
 
     setSelectedUser([...selectedUser, userAdd]);
+  };
+  const onCreateGroup = async () => {
+    setLoading(true);
+    if (!groupChatName || !selectedUser) {
+      messageApi.open({
+        type: "error",
+        content: "Please fill all the field!!!",
+        duration: 2,
+      });
+      return;
+    }
+    const result = {
+      name: groupChatName,
+      users: JSON.stringify(selectedUser?.map((item) => item._id)),
+    };
+    try {
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      };
+      const { data } = await axios.post(
+        `http://localhost:5000/chat/group`,
+        result,
+        config
+      );
+      setChats([data, ...chats]);
+      setLoading(false);
+      setFormGroup(false);
+    } catch (error) {}
   };
   const onRemoveTag = (user) => {
     const delTag = selectedUser?.filter((item) => item._id !== user._id);
@@ -208,6 +239,7 @@ function Chat() {
     loggedUser,
     searchResultGroup,
     selectedUser,
+    setGroupChatName,
   };
   return (
     <ChatView
@@ -225,6 +257,7 @@ function Chat() {
       onSearchGroup={onSearchGroup}
       onCreateGroup={onCreateGroup}
       onRemoveTag={onRemoveTag}
+      checkUserExist={checkUserExist}
     />
   );
 }

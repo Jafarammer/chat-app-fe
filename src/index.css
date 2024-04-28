@@ -46,6 +46,16 @@ code {
  .card-list:hover{
   background-color: #F3F3F3;
  }
+ .card-list-group{
+  height: auto;
+  padding: 10px 0px;
+  background-color: #00b96b;
+  color: white !important;
+  cursor: pointer;
+ }
+ .card-list-group:hover{
+  background-color: #019759;
+ }
  .card-list-focus{
   padding: 10px 0px;
   background-color: #F3F3F3;

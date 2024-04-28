@@ -20,7 +20,8 @@ import {
   UserOutlined,
   SearchOutlined,
   BellFilled,
-  CloseCircleFilled
+  CloseCircleFilled,
+  LoadingOutlined,
 } from "@ant-design/icons"
 // element
 import {ModalLogout,ModalProfile,FormGroup,CardChat,SkeletonLoading} from '../../elements'
@@ -49,6 +50,7 @@ function Chat({
   loggedUser,
   searchResultGroup,
   selectedUser,
+  setGroupChatName,
   // props function
   openProfile,
   closeProfile,
@@ -62,7 +64,8 @@ function Chat({
   onAccessChat,
   onSearchGroup,
   onCreateGroup,
-  onRemoveTag
+  onRemoveTag,
+  checkUserExist
 }) {
   const content = (
     <List
@@ -117,13 +120,20 @@ function Chat({
             </div>
             {
               chats?.map((item) => (
-                <Card key={item._id} onClick={() => setSelectedChat(item)} className={selectedChat === item ? 'card-list-focus rounded-0' : 'card-list rounded-0'} bodyStyle={{padding: 0}}>
+                <Card 
+                  key={item._id} 
+                  onClick={() => setSelectedChat(item)} 
+                  className={
+                    selectedChat === item ? 'card-list-focus rounded-0' : !item.isGroupChat ? "card-list rounded-0" : "card-list-group rounded-0"
+                  } 
+                  bodyStyle={{padding: 0}}
+                >
                     <List itemLayout='horizontal'>
                     <List.Item className='py-1 ps-2'>
                           <List.Item.Meta
-                            avatar={<Avatar icon={<UserOutlined />} />}
+                            avatar={<Avatar style={{backgroundColor: "grey"}} icon={<UserOutlined />} />}
                             title={
-                              !item.isGroupChat ? getSender(loggedUser, item.users) : item.chatName
+                              !item.isGroupChat ? getSender(loggedUser, item.users) : <p className='text-white mt-1'>{item.chatName}</p>
                             }
                             // description="email"
                           />
@@ -172,7 +182,7 @@ function Chat({
       <section>
         {/* drawer create group */}
         <Drawer title='Create new group' open={formGroup} onClose={closeGroup}>
-          <Input placeholder='Group Name' className='mb-3' />
+          <Input placeholder='Group Name' className='mb-3' onChange={(e) => setGroupChatName(e.target.value)} />
           <Input placeholder='Add People' className='mb-3' onChange={(e) => onSearchGroup(e.target.value)} />
           {
             selectedUser?.map((item) => {
@@ -188,7 +198,7 @@ function Chat({
                 searchResultGroup?.slice(0,4).map((item) => (
                   <Card 
                     key={item._id} 
-                    onClick={() => onCreateGroup(item)} 
+                    onClick={() => checkUserExist(item)} 
                     className='card-list mb-2' 
                     bodyStyle={{padding: 0}}
                   >
@@ -208,7 +218,11 @@ function Chat({
               )
 
             }
-            <Button type='primary' className='px-5 float-end mt-3'>Create Chat</Button>
+            <Button onClick={onCreateGroup} type='primary' className='px-5 mt-3' block>
+              {
+                loading ? <LoadingOutlined/> : "Create Group"
+              }
+            </Button>
         </Drawer>
         {/* drawer search */}
         <Drawer style={{width: '480px'}} placement='left' open={searchUser} onClose={closeSearch}>
