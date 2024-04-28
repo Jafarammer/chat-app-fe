@@ -28,6 +28,8 @@ function Chat() {
   const [searchUser, setSearchUser] = useState(false);
   const [loadingChat, setLoadingChat] = useState(false);
   const [loggedUser, setLoggedUser] = useState(false);
+  const [searchGroup, setSearchGroup] = useState("");
+  const [searchResultGroup, setSearchResultGroup] = useState([]);
   // function
   const openSearch = () => {
     setSearchUser(true);
@@ -129,6 +131,34 @@ function Chat() {
       });
     }
   };
+  const onSearchGroup = async (query) => {
+    setSearchGroup(query);
+    if (!query) {
+      return;
+    }
+
+    try {
+      setLoading(true);
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      };
+
+      const { data } = await axios.get(
+        `http://localhost:5000/user?search=${searchGroup}`,
+        config
+      );
+      setLoading(false);
+      setSearchResultGroup(data);
+    } catch (error) {
+      messageApi.open({
+        type: "error",
+        content: "Error to user!!!",
+        duration: 2,
+      });
+    }
+  };
   const onLogout = () => {
     Cookies.remove("chatToken");
     history.push("/");
@@ -159,6 +189,7 @@ function Chat() {
     selectedChat,
     chats,
     loggedUser,
+    searchResultGroup,
   };
   return (
     <ChatView
@@ -173,6 +204,7 @@ function Chat() {
       openSearch={openSearch}
       closeSearch={closeSearch}
       onAccessChat={onAccessChat}
+      onSearchGroup={onSearchGroup}
     />
   );
 }

@@ -1,7 +1,7 @@
 import React from 'react'
 import {Form,Input,Button} from 'antd'
 
-function FormGroup() {
+function FormGroup({onSearchGroup}) {
   return (
     <Form layout='vertical'>
         <Form.Item
@@ -12,7 +12,7 @@ function FormGroup() {
         <Form.Item
             label={<b>Add People</b>}
         >
-            <Input/>
+            <Input />
         </Form.Item>
         <Button type='primary' className='px-5 float-end'>Create Chat</Button>
     </Form>

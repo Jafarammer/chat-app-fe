@@ -11,7 +11,8 @@ import {
   List,
   Drawer,
   Typography,
-  Spin
+  Spin,
+  Form
 }  from "antd"
 import {
   PlusOutlined,
@@ -20,7 +21,7 @@ import {
   BellFilled
 } from "@ant-design/icons"
 // element
-import {ModalLogout,ModalProfile,FormGroup,CardChat} from '../../elements'
+import {ModalLogout,ModalProfile,FormGroup,CardChat,SkeletonLoading} from '../../elements'
 import './style.scss'
 import { getSender } from '../../../config/ChatLogics'
 const {Text} = Typography
@@ -44,6 +45,7 @@ function Chat({
   searchUser,
   loadingChat,
   loggedUser,
+  searchResultGroup,
   // props function
   openProfile,
   closeProfile,
@@ -54,7 +56,8 @@ function Chat({
   closeGroup,
   openSearch,
   closeSearch,
-  onAccessChat
+  onAccessChat,
+  onSearchGroup
 }) {
   const content = (
     <List
@@ -109,7 +112,7 @@ function Chat({
             </div>
             {
               chats?.map((item) => (
-                <Card key={item._id} onClick={() => setSelectedChat(item)} className={selectedChat === item ? 'card-list-focus' : 'card-list'} bodyStyle={{padding: 0}}>
+                <Card key={item._id} onClick={() => setSelectedChat(item)} className={selectedChat === item ? 'card-list-focus rounded-0' : 'card-list rounded-0'} bodyStyle={{padding: 0}}>
                     <List itemLayout='horizontal'>
                     <List.Item className='py-1 ps-2'>
                           <List.Item.Meta
@@ -164,7 +167,34 @@ function Chat({
       <section>
         {/* drawer create group */}
         <Drawer title='Create new group' open={formGroup} onClose={closeGroup}>
-            <FormGroup/>
+          <Input placeholder='Group Name' className='mb-3' />
+          <Input placeholder='Add People' className='mb-3' onChange={(e) => onSearchGroup(e.target.value)} />
+            {
+              loading ? (<SkeletonLoading/>) :(
+                searchResultGroup?.slice(0,4).map((item) => (
+                  <Card 
+                    key={item._id} 
+                    // onClick={() => setSelectedChat(item)} 
+                    className='card-list mb-2' 
+                    bodyStyle={{padding: 0}}
+                  >
+                    <List itemLayout='horizontal'>
+                    <List.Item className='py-1 ps-2'>
+                          <List.Item.Meta
+                            avatar={<Avatar icon={<UserOutlined />} />}
+                            title={
+                              item.name
+                            }
+                            // description="email"
+                          />
+                      </List.Item>
+                    </List>
+                </Card>
+                ))
+              )
+
+            }
+            <Button type='primary' className='px-5 float-end mt-3'>Create Chat</Button>
         </Drawer>
         {/* drawer search */}
         <Drawer style={{width: '480px'}} placement='left' open={searchUser} onClose={closeSearch}>

@@ -35,3 +35,21 @@ code {
   margin-top: 30px;
   margin-bottom: 40px;
 }
+
+.card-list{
+  height: auto;
+  padding: 10px 0px;
+  background-color: white;
+  color: #3B3B3B;
+  cursor: pointer;
+ }
+ .card-list:hover{
+  background-color: #F3F3F3;
+ }
+ .card-list-focus{
+  padding: 10px 0px;
+  background-color: #F3F3F3;
+  color: #3B3B3B;
+  height: auto;
+  cursor: pointer;
+ } 
