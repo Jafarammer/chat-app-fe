@@ -27,7 +27,7 @@ import {
 import {ModalLogout,ModalProfile,FormGroup,CardChat,SkeletonLoading} from '../../elements'
 import './style.scss'
 import { getSender } from '../../../config/ChatLogics'
-const {Text} = Typography
+const {Text,Title} = Typography
 
 
 
@@ -145,22 +145,32 @@ function Chat({
           </Card>
         </Col>
         <Col span={18}>
+        {
+          selectedChat ? (
+              <>
+                <div className='bg-chat content-chat'>
+                ui chat
+                </div>
+                <Card className='chat-typing'>
+                  <Space.Compact
+                    className='input-typing'
+                  >
+                    <Input placeholder="Typing a message" />
+                    <Button type="primary">
+                      Send
+                    </Button>
+                  </Space.Compact>
+                </Card>
+              </>
+          ) : (
+            <div className='not-chat d-flex justify-content-center align-items-center'>
+              <Title className='bg-title'>Click on a user to start chatting</Title>
+          </div>
+          )
+        }
           {/* <div className='bg-chat' style={{width: "100%", height: "85vh"}}>
                 untuk bubble chat
           </div> */}
-          <div className='bg-chat content-chat'>
-                
-          </div>
-          <Card className='chat-typing'>
-            <Space.Compact
-              className='input-typing'
-            >
-              <Input placeholder="Typing a message" />
-              <Button type="primary">
-                Send
-              </Button>
-            </Space.Compact>
-          </Card>
         </Col>
       </Row>
       {/* section modal */}
