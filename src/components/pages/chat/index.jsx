@@ -27,7 +27,7 @@ import {
   TeamOutlined
 } from "@ant-design/icons"
 // element
-import {ModalLogout,ModalProfile,FormGroup,CardChat,SkeletonLoading,ModalAnotherProfile} from '../../elements'
+import {ModalLogout,ModalProfile,FormGroup,CardChat,SkeletonLoading,ModalAnotherProfile,ModalGroupProfile} from '../../elements'
 import './style.scss'
 import { getSender,getSenderFull } from '../../../config/ChatLogics'
 const {Text,Title} = Typography
@@ -56,6 +56,9 @@ function Chat({
   selectedUser,
   setGroupChatName,
   showAnotherProfile,
+  showGroup,
+  fetchAgain,
+  setFetchAgain,
   // props function
   openProfile,
   closeProfile,
@@ -72,10 +75,12 @@ function Chat({
   onRemoveTag,
   checkUserExist,
   openAnotherProfile,
-  closeAnotherProfile
+  closeAnotherProfile,
+  openGroupProfile,
+  closeGroupProfile
 }) {
 
-  console.log("selectedChat", selectedChat);
+  // console.log("selectedChat", selectedChat);
 
   const content = (
     <List
@@ -172,7 +177,7 @@ function Chat({
                         </Flex>
                       ):(
                         <Flex align='center' style={{height: "100%"}}>
-                            <Avatar size="large" className='ms-3' icon={<TeamOutlined />} />
+                            <Avatar size="large" className='ms-3' icon={<TeamOutlined />} onClick={openGroupProfile} />
                             <Title level={3} className='fw-bold ms-3 mt-1'>{selectedChat.chatName.toUpperCase()}</Title>
                         </Flex>
                       )
@@ -217,6 +222,12 @@ function Chat({
         >
           YES
         </ModalLogout>
+        <ModalGroupProfile
+          open={showGroup}
+          onClose={closeGroupProfile}
+          fetchAgain={fetchAgain}
+          setFetchAgain={setFetchAgain}
+        />
       </section>
       {/* section drawer */}
       <section>

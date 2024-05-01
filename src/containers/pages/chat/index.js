@@ -34,7 +34,14 @@ function Chat() {
   const [groupChatName, setGroupChatName] = useState("");
   const [fetchAgain, setFetchAgain] = useState(false);
   const [showAnotherProfile, setShowAnotherProfile] = useState(false);
+  const [showGroup, setShowGroup] = useState(false);
   // function
+  const openGroupProfile = () => {
+    setShowGroup(true);
+  };
+  const closeGroupProfile = () => {
+    setShowGroup(false);
+  };
   const openAnotherProfile = () => {
     setShowAnotherProfile(true);
   };
@@ -219,6 +226,7 @@ function Chat() {
   };
   const onLogout = () => {
     Cookies.remove("chatToken");
+    localStorage.removeItem("userInfo");
     history.push("/");
   };
   // useEffect
@@ -252,6 +260,9 @@ function Chat() {
     setGroupChatName,
     user,
     showAnotherProfile,
+    showGroup,
+    fetchAgain,
+    setFetchAgain,
   };
   return (
     <ChatView
@@ -272,6 +283,8 @@ function Chat() {
       checkUserExist={checkUserExist}
       openAnotherProfile={openAnotherProfile}
       closeAnotherProfile={closeAnotherProfile}
+      openGroupProfile={openGroupProfile}
+      closeGroupProfile={closeGroupProfile}
     />
   );
 }

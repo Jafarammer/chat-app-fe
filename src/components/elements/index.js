@@ -7,6 +7,7 @@ import FormGroup from "./form/FormGroup";
 import SkeletonLoading from "./loading/SkeletonLoading";
 import CardChat from "./card/CardChat";
 import ModalAnotherProfile from "./modal/ModalAnotherProfile";
+import ModalGroupProfile from "./modal/ModalGroupProfile";
 
 export {
   Loading,
@@ -18,4 +19,5 @@ export {
   SkeletonLoading,
   CardChat,
   ModalAnotherProfile,
+  ModalGroupProfile,
 };
