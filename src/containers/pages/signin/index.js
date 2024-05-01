@@ -28,6 +28,7 @@ function Signin() {
     setIsLoading(true);
     login(data).then((result) => {
       if (result == true) {
+        setUser(localStorage.getItem("userInfo"));
         messageApi.open({
           type: "success",
           content: "Login success",
@@ -35,7 +36,6 @@ function Signin() {
         });
         history.push("/chat");
         setIsLoading(false);
-        setUser(localStorage.getItem("userInfo"));
       } else {
         messageApi.open({
           type: "error",

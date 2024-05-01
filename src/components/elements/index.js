@@ -6,6 +6,7 @@ import ModalLogout from "./modal/ModalLogout";
 import FormGroup from "./form/FormGroup";
 import SkeletonLoading from "./loading/SkeletonLoading";
 import CardChat from "./card/CardChat";
+import ModalAnotherProfile from "./modal/ModalAnotherProfile";
 
 export {
   Loading,
@@ -16,4 +17,5 @@ export {
   FormGroup,
   SkeletonLoading,
   CardChat,
+  ModalAnotherProfile,
 };

@@ -32,7 +32,15 @@ function Chat() {
   const [searchResultGroup, setSearchResultGroup] = useState([]);
   const [selectedUser, setSelectedUser] = useState([]);
   const [groupChatName, setGroupChatName] = useState("");
+  const [fetchAgain, setFetchAgain] = useState(false);
+  const [showAnotherProfile, setShowAnotherProfile] = useState(false);
   // function
+  const openAnotherProfile = () => {
+    setShowAnotherProfile(true);
+  };
+  const closeAnotherProfile = () => {
+    setShowAnotherProfile(false);
+  };
   const openSearch = () => {
     setSearchUser(true);
   };
@@ -201,7 +209,9 @@ function Chat() {
       setChats([data, ...chats]);
       setLoading(false);
       setFormGroup(false);
-    } catch (error) {}
+    } catch (error) {
+      console.log("ADA ERROR", error);
+    }
   };
   const onRemoveTag = (user) => {
     const delTag = selectedUser?.filter((item) => item._id !== user._id);
@@ -220,7 +230,7 @@ function Chat() {
   useEffect(() => {
     setLoggedUser(JSON.parse(localStorage.getItem("userInfo")));
     fetchChat();
-  }, []);
+  }, [fetchAgain]);
   // send props to component
   const props = {
     showProfile,
@@ -240,6 +250,8 @@ function Chat() {
     searchResultGroup,
     selectedUser,
     setGroupChatName,
+    user,
+    showAnotherProfile,
   };
   return (
     <ChatView
@@ -258,6 +270,8 @@ function Chat() {
       onCreateGroup={onCreateGroup}
       onRemoveTag={onRemoveTag}
       checkUserExist={checkUserExist}
+      openAnotherProfile={openAnotherProfile}
+      closeAnotherProfile={closeAnotherProfile}
     />
   );
 }

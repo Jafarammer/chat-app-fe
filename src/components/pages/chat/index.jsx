@@ -1,4 +1,4 @@
-import React from 'react'
+import React,{useState} from 'react'
 import {
   Row,
   Col,
@@ -13,7 +13,8 @@ import {
   Typography,
   Spin,
   Form,
-  Tag
+  Tag,
+  Flex
 }  from "antd"
 import {
   PlusOutlined,
@@ -22,11 +23,13 @@ import {
   BellFilled,
   CloseCircleFilled,
   LoadingOutlined,
+  LeftOutlined,
+  TeamOutlined
 } from "@ant-design/icons"
 // element
-import {ModalLogout,ModalProfile,FormGroup,CardChat,SkeletonLoading} from '../../elements'
+import {ModalLogout,ModalProfile,FormGroup,CardChat,SkeletonLoading,ModalAnotherProfile} from '../../elements'
 import './style.scss'
-import { getSender } from '../../../config/ChatLogics'
+import { getSender,getSenderFull } from '../../../config/ChatLogics'
 const {Text,Title} = Typography
 
 
@@ -36,6 +39,7 @@ function Chat({
   selectedChat,
   setSelectedChat,
   chats,
+  user,
   // props useState
   contextHolder,
   search,
@@ -51,6 +55,7 @@ function Chat({
   searchResultGroup,
   selectedUser,
   setGroupChatName,
+  showAnotherProfile,
   // props function
   openProfile,
   closeProfile,
@@ -65,8 +70,13 @@ function Chat({
   onSearchGroup,
   onCreateGroup,
   onRemoveTag,
-  checkUserExist
+  checkUserExist,
+  openAnotherProfile,
+  closeAnotherProfile
 }) {
+
+  console.log("selectedChat", selectedChat);
+
   const content = (
     <List
       className='popover-list'
@@ -124,16 +134,16 @@ function Chat({
                   key={item._id} 
                   onClick={() => setSelectedChat(item)} 
                   className={
-                    selectedChat === item ? 'card-list-focus rounded-0' : !item.isGroupChat ? "card-list rounded-0" : "card-list-group rounded-0"
+                    selectedChat === item ? 'card-list-focus rounded-0' : "card-list rounded-0"
                   } 
                   bodyStyle={{padding: 0}}
                 >
                     <List itemLayout='horizontal'>
                     <List.Item className='py-1 ps-2'>
                           <List.Item.Meta
-                            avatar={<Avatar style={{backgroundColor: "grey"}} icon={<UserOutlined />} />}
+                            avatar={<Avatar style={{backgroundColor: item.isGroupChat ? "#00b96b" : "grey"}} icon={item.isGroupChat ? <TeamOutlined /> : <UserOutlined />} />}
                             title={
-                              !item.isGroupChat ? getSender(loggedUser, item.users) : <p className='text-white mt-1'>{item.chatName}</p>
+                              !item.isGroupChat ? getSender(loggedUser, item.users) : item.chatName
                             }
                             // description="email"
                           />
@@ -149,7 +159,27 @@ function Chat({
           selectedChat ? (
               <>
                 <div className='bg-chat content-chat'>
-                ui chat
+                  <div
+                    style={{width: "100%", height: "70px", backgroundColor: "#F3F3F3"}}
+                    className='p-0 m-0'
+                  >
+                    {
+                      !selectedChat.isGroupChat ? (
+                        <Flex align='center' style={{height: "100%"}}>
+                          <Avatar size="large" className='ms-3' icon={<UserOutlined />} onClick={openAnotherProfile} />
+                          <Title level={3} className='fw-bold ms-3 mt-1'>{selectedChat.users[1].name}</Title>
+                          <ModalAnotherProfile open={showAnotherProfile} onClose={closeAnotherProfile} user={selectedChat.users[1]} />
+                        </Flex>
+                      ):(
+                        <Flex align='center' style={{height: "100%"}}>
+                            <Avatar size="large" className='ms-3' icon={<TeamOutlined />} />
+                            <Title level={3} className='fw-bold ms-3 mt-1'>{selectedChat.chatName.toUpperCase()}</Title>
+                        </Flex>
+                      )
+                    }
+                  </div>
+                    {/* untuk tampilan mobile tampilkan button back
+                    <Button onClick={() => setSelectedChat("")} shape='default' type='primary' className='mt-2 ms-3' icon={<LeftOutlined/>} /> */}
                 </div>
                 <Card className='chat-typing'>
                   <Space.Compact
